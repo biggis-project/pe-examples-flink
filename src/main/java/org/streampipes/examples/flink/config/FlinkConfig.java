@@ -7,9 +7,7 @@ public enum FlinkConfig implements PeConfig {
   INSTANCE;
 
   private SpConfig config;
-  public static final String JAR_FILE = "./streampipes-pe-mixed-flink.jar";
-//	public static final String JAR_FILE = "c:\\git\\semantic-epa-parent\\semantic-epa-flink-samples\\target\\semantic-epa-flink-samples-0.40.3-SNAPSHOT.jar";
-//	public static final String JAR_FILE = "/Users/philippzehnder/Coding/fzi/semantic-epa-parent/semantic-epa-flink-samples/target/semantic-epa-flink-samples-0.40.3-SNAPSHOT.jar";
+  public static final String JAR_FILE = "./streampipes-examples-flink.jar";
 
   private final static String HOST = "host";
   private final static String PORT = "port";
@@ -27,7 +25,7 @@ public enum FlinkConfig implements PeConfig {
   FlinkConfig() {
     config = SpConfig.getSpConfig(SERVICE_ID);
 
-    config.register(HOST, "pe-flink-samples", "Hostname for the pe mixed flink component");
+    config.register(HOST, "pe-examples-flink", "Hostname for the pe mixed flink component");
     config.register(PORT, 8090, "Port for the pe mixed flink component");
     config.register(FLINK_HOST, "jobmanager", "Host for the flink cluster");
     config.register(FLINK_PORT, 6123, "Port for the flink cluster");
