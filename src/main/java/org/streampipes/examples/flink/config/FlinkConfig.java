@@ -19,7 +19,7 @@ public enum FlinkConfig implements PeConfig {
   private final static String ICON_HOST = "icon_host";
   private final static String ICON_PORT = "icon_port";
 
-  private final static String SERVICE_ID = "pe/org.streampipes.pe.mixed.flink";
+  private final static String SERVICE_ID = "pe/org.streampipes.examples.flink";
   private final static String SERVICE_NAME = "service_name";
 
   FlinkConfig() {
@@ -35,7 +35,7 @@ public enum FlinkConfig implements PeConfig {
     config.register(ICON_HOST, "backend", "Hostname for the icon host");
     config.register(ICON_PORT, 80, "Port for the icons in nginx");
 
-    config.register(SERVICE_NAME, "Mixed flink", "The name of the service");
+    config.register(SERVICE_NAME, "Mixed Flink", "The name of the service");
 
   }
 
