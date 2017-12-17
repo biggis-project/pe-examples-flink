@@ -14,6 +14,7 @@ import org.streampipes.sdk.helpers.SupportedFormats;
 import org.streampipes.sdk.helpers.SupportedProtocols;
 import org.streampipes.wrapper.flink.FlinkDataProcessorDeclarer;
 import org.streampipes.wrapper.flink.FlinkDataProcessorRuntime;
+import org.streampipes.wrapper.flink.FlinkDeploymentConfig;
 
 public class SequenceController extends FlinkDataProcessorDeclarer<SequenceParameters> {
 
@@ -45,8 +46,8 @@ public class SequenceController extends FlinkDataProcessorDeclarer<SequenceParam
 
     SequenceParameters params = new SequenceParameters(graph, timeWindowSize, timeUnit);
 
-    return new SequenceProgram(params);
-//    return new SequenceProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
-//            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
+    //return new SequenceProgram(params);
+    return new SequenceProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
+            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
   }
 }

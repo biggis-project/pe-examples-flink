@@ -20,6 +20,7 @@ public class IncreaseProgram extends FlinkDataProcessorRuntime<IncreaseParameter
 
   public IncreaseProgram(IncreaseParameters params, FlinkDeploymentConfig config) {
     super(params, config);
+    setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
   }
 
   @Override
@@ -32,6 +33,7 @@ public class IncreaseProgram extends FlinkDataProcessorRuntime<IncreaseParameter
                 return Long.parseLong(String.valueOf(element.get(timestampField)));
               }
             })
+            .setParallelism(1)
             .keyBy(getKeySelector())
             .window(SlidingEventTimeWindows.of(Time.seconds(params.getDuration()), Time.seconds(1)))
             .apply(new Increase(params.getIncrease(), params.getOperation(), params.getMapping(), params

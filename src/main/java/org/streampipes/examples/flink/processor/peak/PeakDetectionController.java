@@ -16,6 +16,7 @@ import org.streampipes.sdk.helpers.SupportedFormats;
 import org.streampipes.sdk.helpers.SupportedProtocols;
 import org.streampipes.wrapper.flink.FlinkDataProcessorDeclarer;
 import org.streampipes.wrapper.flink.FlinkDataProcessorRuntime;
+import org.streampipes.wrapper.flink.FlinkDeploymentConfig;
 
 /**
  * Created by riemer on 20.04.2017.
@@ -79,9 +80,9 @@ public class PeakDetectionController extends FlinkDataProcessorDeclarer<PeakDete
     PeakDetectionParameters params = new PeakDetectionParameters(sepa,
             valueToObserve, timestampMapping, groupBy, countWindowSize, lag, threshold, influence);
 
-    return new PeakDetectionProgram(params);
-//    return new PeakDetectionProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
-//            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
+    //return new PeakDetectionProgram(params);
+    return new PeakDetectionProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
+            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
 
   }
 }
