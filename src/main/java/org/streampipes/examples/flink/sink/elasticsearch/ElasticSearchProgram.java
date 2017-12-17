@@ -2,6 +2,7 @@ package org.streampipes.examples.flink.sink.elasticsearch;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.util.Collector;
 import org.streampipes.examples.flink.config.FlinkConfig;
 import org.streampipes.examples.flink.sink.elasticsearch.elastic5.Elasticsearch5Sink;
 import org.streampipes.wrapper.flink.FlinkDataSinkRuntime;
@@ -50,9 +51,13 @@ public class ElasticSearchProgram extends FlinkDataSinkRuntime<ElasticSearchPara
             e.printStackTrace();
         }
 
-        convertedStream[0].flatMap((FlatMapFunction<Map<String, Object>, Map<String, Object>>) (arg0, arg1) -> {
-            arg0.put("timestamp", new Date((long) arg0.get(timeName)));
-            arg1.collect(arg0);
+        convertedStream[0].flatMap(new FlatMapFunction<Map<String, Object>, Map<String, Object>>() {
+            @Override
+            public void flatMap(Map<String, Object> arg0, Collector<Map<String, Object>> arg1) throws Exception {
+                arg0.put("timestamp", new Date((long) arg0.get(timeName)));
+                arg1.collect(arg0);
+            }
+
         }).addSink(new Elasticsearch5Sink<>(config, transports, new
                 ElasticSearchIndexRequestBuilder(indexName, typeName)));
     }

@@ -45,7 +45,6 @@ public class ElasticSearchController extends FlinkDataSinkDeclarer<ElasticSearch
 
     return new ElasticSearchProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
             FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
-//		return new ElasticSearchProgram(graph);
   }
 
 }
