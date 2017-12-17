@@ -79,7 +79,6 @@ public class PeakDetectionCalculator implements FlatMapFunction<List<Map<String,
       outMap.put("timestamp", System.currentTimeMillis());
       outMap.put("signal", signals[signals.length - 1]);
 
-      System.out.println("signal=" + signals[signals.length - 1]);
       out.collect(outMap);
     }
 

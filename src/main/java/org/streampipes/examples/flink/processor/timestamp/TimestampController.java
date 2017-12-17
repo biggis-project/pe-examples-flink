@@ -39,7 +39,6 @@ public class TimestampController extends FlinkDataProcessorDeclarer<TimestampPar
   @Override
   protected FlinkDataProcessorRuntime<TimestampParameters> getRuntime(
           DataProcessorInvocation graph) {
-    System.out.println(FlinkConfig.JAR_FILE);
     AppendOutputStrategy strategy = (AppendOutputStrategy) graph.getOutputStrategies().get(0);
 
     String appendTimePropertyName = SepaUtils.getEventPropertyName(strategy.getEventProperties(), "appendedTime");
@@ -56,7 +55,6 @@ public class TimestampController extends FlinkDataProcessorDeclarer<TimestampPar
 
     return new TimestampProgram(staticParam, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
             FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
-//		return new TimestampProgram(staticParam);
   }
 
 }

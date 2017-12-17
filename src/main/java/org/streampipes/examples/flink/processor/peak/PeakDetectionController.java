@@ -4,7 +4,9 @@ import org.streampipes.examples.flink.config.FlinkConfig;
 import org.streampipes.model.DataProcessorType;
 import org.streampipes.model.graph.DataProcessorDescription;
 import org.streampipes.model.graph.DataProcessorInvocation;
+import org.streampipes.model.schema.PropertyScope;
 import org.streampipes.sdk.builder.ProcessingElementBuilder;
+import org.streampipes.sdk.builder.StreamRequirementsBuilder;
 import org.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
 import org.streampipes.sdk.helpers.EpProperties;
 import org.streampipes.sdk.helpers.EpRequirements;
@@ -14,7 +16,6 @@ import org.streampipes.sdk.helpers.SupportedFormats;
 import org.streampipes.sdk.helpers.SupportedProtocols;
 import org.streampipes.wrapper.flink.FlinkDataProcessorDeclarer;
 import org.streampipes.wrapper.flink.FlinkDataProcessorRuntime;
-import org.streampipes.wrapper.flink.FlinkDeploymentConfig;
 
 /**
  * Created by riemer on 20.04.2017.
@@ -35,13 +36,15 @@ public class PeakDetectionController extends FlinkDataProcessorDeclarer<PeakDete
             "Detect peaks in time series data")
             .category(DataProcessorType.ALGORITHM)
             .iconUrl(FlinkConfig.getIconUrl("peak-detection-icon"))
-            .requiredPropertyStream1WithUnaryMapping(EpRequirements.numberReq(),
-                    VALUE_TO_OBSERVE, "Value to " +
-                            "observe", "Provide a value where statistics are calculated upon")
-            .requiredPropertyStream1WithUnaryMapping(EpRequirements.timestampReq(),
-                    TIMESTAMP_MAPPING, "Time", "Provide a time parameter")
-            .requiredPropertyStream1WithUnaryMapping(EpRequirements.stringReq(),
-                    PARTITION_BY, "Group by", "Partition the stream by a given id")
+            .requiredStream(StreamRequirementsBuilder.create().requiredPropertyWithUnaryMapping(EpRequirements
+                            .numberReq(),
+                    Labels.from(VALUE_TO_OBSERVE, "Value to " +
+                            "observe", "Provide a value where statistics are calculated upon"), PropertyScope.MEASUREMENT_PROPERTY)
+                    .requiredPropertyWithUnaryMapping(EpRequirements.timestampReq(),
+                            Labels.from(TIMESTAMP_MAPPING, "Time", "Provide a time parameter"), PropertyScope.NONE)
+                    .requiredPropertyWithUnaryMapping(EpRequirements.stringReq(),
+                            Labels.from(PARTITION_BY, "Group by", "Partition the stream by a given id"), PropertyScope
+                                    .DIMENSION_PROPERTY).build())
             .requiredIntegerParameter(COUNT_WINDOW_SIZE, "Count Window Size", "Defines " +
                     "the size of the count window", 60)
             .requiredIntegerParameter(LAG_KEY, "Lag", "Defines the lag of the smoothing " +
@@ -76,10 +79,9 @@ public class PeakDetectionController extends FlinkDataProcessorDeclarer<PeakDete
     PeakDetectionParameters params = new PeakDetectionParameters(sepa,
             valueToObserve, timestampMapping, groupBy, countWindowSize, lag, threshold, influence);
 
-    //return new PeakDetectionProgram(params);
-
-    return new PeakDetectionProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
-            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
+    return new PeakDetectionProgram(params);
+//    return new PeakDetectionProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
+//            FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
 
   }
 }

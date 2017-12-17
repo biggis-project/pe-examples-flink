@@ -21,10 +21,19 @@ public class AggregationProgram extends FlinkDataProcessorRuntime<AggregationPar
 
   @Override
   protected DataStream<Map<String, Object>> getApplicationLogic(DataStream<Map<String, Object>>... dataStreams) {
-    return dataStreams[0]
-            .keyBy(getKeySelector())
-            .window(SlidingEventTimeWindows.of(Time.seconds(params.getTimeWindowSize()), Time.seconds(params.getOutputEvery())))
-            .apply(new Aggregation(params.getAggregationType(), params.getAggregate(), params.getGroupBy().get(0)));
+    return getKeyedStream(dataStreams[0]);
+  }
+
+  private DataStream<Map<String, Object>> getKeyedStream(DataStream<Map<String, Object>> dataStream) {
+    if (params.getGroupBy().size() > 0) {
+      return dataStream
+              .keyBy(getKeySelector())
+              .window(SlidingEventTimeWindows.of(Time.seconds(params.getTimeWindowSize()), Time.seconds(params.getOutputEvery())))
+              .apply(new Aggregation(params.getAggregationType(), params.getAggregate(), params.getGroupBy().get(0)));
+    } else {
+      return dataStream.timeWindowAll(Time.seconds(params.getTimeWindowSize()), Time.seconds(params.getOutputEvery()))
+              .apply(new Aggregation(params.getAggregationType(), params.getAggregate()));
+    }
   }
 
   private KeySelector<Map<String, Object>, String> getKeySelector() {

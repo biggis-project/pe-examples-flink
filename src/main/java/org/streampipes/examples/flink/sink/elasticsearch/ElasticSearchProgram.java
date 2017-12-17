@@ -4,8 +4,6 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.streampipes.examples.flink.config.FlinkConfig;
 import org.streampipes.examples.flink.sink.elasticsearch.elastic5.Elasticsearch5Sink;
-import org.streampipes.model.graph.DataSinkInvocation;
-import org.streampipes.model.util.SepaUtils;
 import org.streampipes.wrapper.flink.FlinkDataSinkRuntime;
 import org.streampipes.wrapper.flink.FlinkDeploymentConfig;
 
@@ -19,28 +17,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ElasticSearchProgram extends FlinkDataSinkRuntime implements Serializable {
+public class ElasticSearchProgram extends FlinkDataSinkRuntime<ElasticSearchParameters> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public ElasticSearchProgram(DataSinkInvocation graph) {
-        super(graph);
+    public ElasticSearchProgram(ElasticSearchParameters params) {
+        super(params);
     }
 
-    public ElasticSearchProgram(DataSinkInvocation graph, FlinkDeploymentConfig config) {
-        super(graph, config);
+    public ElasticSearchProgram(ElasticSearchParameters params,
+                                FlinkDeploymentConfig config) {
+        super(params, config);
     }
 
     @Override
-    public void getSink(
-            DataStream<Map<String, Object>>... convertedStream) {
+    public void getSink(DataStream<Map<String, Object>>... convertedStream) {
 
         Map<String, String> config = new HashMap<>();
         config.put("bulk.flush.max.actions", "100");
         config.put("cluster.name", "streampipes-cluster");
 
-        String indexName = SepaUtils.getFreeTextStaticPropertyValue(graph, "index-name");
-        String timeName = SepaUtils.getMappingPropertyName(graph, "timestamp");
+        String indexName = params.getIndexName();
+        String timeName = params.getTimestampField();
 
         String typeName = indexName;
 

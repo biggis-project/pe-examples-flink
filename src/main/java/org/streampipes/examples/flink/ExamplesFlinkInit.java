@@ -6,10 +6,11 @@ import org.streampipes.examples.flink.config.FlinkConfig;
 import org.streampipes.examples.flink.processor.aggregation.AggregationController;
 import org.streampipes.examples.flink.processor.increase.IncreaseController;
 import org.streampipes.examples.flink.processor.peak.PeakDetectionController;
+import org.streampipes.examples.flink.processor.sequence.SequenceController;
 import org.streampipes.examples.flink.processor.timestamp.TimestampController;
 import org.streampipes.examples.flink.sink.elasticsearch.ElasticSearchController;
 
-public class FlinkInit extends StandaloneModelSubmitter {
+public class ExamplesFlinkInit extends StandaloneModelSubmitter {
 
   public static void main(String[] args) {
     DeclarersSingleton.getInstance()
@@ -17,9 +18,10 @@ public class FlinkInit extends StandaloneModelSubmitter {
             .add(new AggregationController())
             .add(new IncreaseController())
             .add(new PeakDetectionController())
-            .add(new ElasticSearchController());
+            .add(new ElasticSearchController())
+            .add(new SequenceController());
 
-    new FlinkInit().init(FlinkConfig.INSTANCE);
+    new ExamplesFlinkInit().init(FlinkConfig.INSTANCE);
   }
 
 }

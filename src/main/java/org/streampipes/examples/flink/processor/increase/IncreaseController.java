@@ -20,6 +20,9 @@ import org.streampipes.wrapper.flink.FlinkDeploymentConfig;
 
 public class IncreaseController extends FlinkDataProcessorDeclarer<IncreaseParameters> {
 
+  private static final String PARTITION_BY = "partition-by";
+  private static final String TIMESTAMP = "timestamp";
+
   @Override
   public DataProcessorDescription declareModel() {
     return ProcessingElementBuilder.create("increase", "Increase", "Detects the increase of a numerical field over a customizable time window. Example: A temperature value increases by 10 percent within 5 minutes.")
@@ -30,6 +33,12 @@ public class IncreaseController extends FlinkDataProcessorDeclarer<IncreaseParam
                     .requiredPropertyWithUnaryMapping(EpRequirements
                     .numberReq(), Labels.from("mapping", "Value to observe", "Specifies the value that should be " +
                     "monitored."), PropertyScope.MEASUREMENT_PROPERTY)
+                    .requiredPropertyWithUnaryMapping(EpRequirements
+                            .timestampReq(), Labels.from(TIMESTAMP, "Timestamp field", "The field that contains " +
+                            "the event's timestamp"), PropertyScope.HEADER_PROPERTY)
+                    .requiredPropertyWithUnaryMapping(EpRequirements.stringReq(),
+                            Labels.from(PARTITION_BY, "Group by", "Partition the stream by a given id"), PropertyScope
+                                    .DIMENSION_PROPERTY)
                     .build())
             .requiredIntegerParameter("increase", "Percentage of Increase/Decrease", "Specifies the increase in " +
                     "percent (e.g., 100 indicates an increase by 100 percent within the specified time window.", 0, 500, 1)
@@ -47,11 +56,14 @@ public class IncreaseController extends FlinkDataProcessorDeclarer<IncreaseParam
     ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(graph);
 
     String operation = extractor.selectedSingleValue("operation", String.class);
-    int increase = extractor.singleValueParameter("increase", Integer.class);
-    int duration = extractor.singleValueParameter("duration", Integer.class);
+    Integer increase = extractor.singleValueParameter("increase", Integer.class);
+    Integer duration = extractor.singleValueParameter("duration", Integer.class);
     String mapping = extractor.mappingPropertyValue("mapping");
+    String groupBy = extractor.mappingPropertyValue(PARTITION_BY);
+    String timestampField = extractor.mappingPropertyValue(TIMESTAMP);
 
-    IncreaseParameters params = new IncreaseParameters(graph, getOperation(operation), increase, duration, mapping);
+    IncreaseParameters params = new IncreaseParameters(graph, getOperation(operation), increase, duration, mapping,
+            groupBy, timestampField);
 
     return new IncreaseProgram(params, new FlinkDeploymentConfig(FlinkConfig.JAR_FILE,
             FlinkConfig.INSTANCE.getFlinkHost(), FlinkConfig.INSTANCE.getFlinkPort()));
