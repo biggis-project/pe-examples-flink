@@ -1,6 +1,7 @@
 package org.streampipes.examples.flink.processor.aggregation;
 
 import org.apache.flink.api.java.functions.KeySelector;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -13,10 +14,12 @@ public class AggregationProgram extends FlinkDataProcessorRuntime<AggregationPar
 
   public AggregationProgram(AggregationParameters params) {
     super(params);
+    setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
   }
 
   public AggregationProgram(AggregationParameters params, FlinkDeploymentConfig config) {
     super(params, config);
+    setStreamTimeCharacteristic(TimeCharacteristic.IngestionTime);
   }
 
   @Override
