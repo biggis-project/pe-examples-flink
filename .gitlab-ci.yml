@@ -98,5 +98,7 @@ docker hub:
      - docker login -u streampipesbuild -p $DOCKER_HUB_USER_PWD
      - docker build --pull -t streampipes/pe-examples-flink .
      - docker push streampipes/pe-examples-flink
+  only:
+    - master
   when: manual
 
