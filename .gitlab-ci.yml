@@ -100,5 +100,4 @@ docker hub:
      - docker push streampipes/pe-examples-flink
   only:
     - master
-  when: manual
 
