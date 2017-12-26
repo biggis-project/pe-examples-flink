@@ -17,9 +17,12 @@ build:
   script:
     - echo "$MAVEN_CREDENTIALS" > /root/.m2/settings.xml
     - mvn clean package -DskipTests
+    - export MVN_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[')
+    - "echo $MVN_VERSION >> ./target/mvn_version"
   artifacts:
     paths:
       - ./target/*.jar
+      - ./target/mvn_version
     expire_in:  1 hour
   except:
     - /release-.*$/
@@ -33,6 +36,8 @@ docker-backend:
      - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $REGISTRY_HOST
      - docker build --pull -t $IMAGE_NAME:dev .
      - docker push $IMAGE_NAME:dev
+   only:
+     - dev
 
 deploy:
   image: maven:3-jdk-8
@@ -89,16 +94,21 @@ finish release:
     - git push origin --all
     - git push origin --tags
   when: manual
+  except:
+    - master
   
 docker hub:
   image: docker:17.06.0-ce
   stage: release
   when: manual
   script:
-     - docker login -u streampipesbuild -p $DOCKER_HUB_USER_PWD
-     - docker build --pull -t streampipes/pe-examples-flink .
-     - docker push streampipes/pe-examples-flink
+    - export MVN_VERSION=$(cat ./target/mvn_version)
+    - echo $MVN_VERSION
+    - docker login -u streampipesbuild -p $DOCKER_HUB_USER_PWD
+    - docker build --pull -t streampipes/pe-examples-flink:$MVN_VERSION .
+    - docker push streampipes/pe-examples-flink:$MVN_VERSION
+    - docker build --pull -t streampipes/pe-examples-flink .
+    - docker push streampipes/pe-examples-flink
   only:
     - master
-  when: manual
 
