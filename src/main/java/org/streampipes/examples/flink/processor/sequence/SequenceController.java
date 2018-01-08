@@ -54,7 +54,7 @@ public class SequenceController extends FlinkDataProcessorDeclarer<SequenceParam
   }
 
   @Override
-  protected FlinkDataProcessorRuntime<SequenceParameters> getRuntime(DataProcessorInvocation graph) {
+  public FlinkDataProcessorRuntime<SequenceParameters> getRuntime(DataProcessorInvocation graph) {
     ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(graph);
 
     Integer timeWindowSize = extractor.singleValueParameter(TIME_WINDOW, Integer.class);

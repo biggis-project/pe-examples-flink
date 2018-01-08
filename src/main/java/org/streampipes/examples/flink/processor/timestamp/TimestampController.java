@@ -53,7 +53,7 @@ public class TimestampController extends FlinkDataProcessorDeclarer<TimestampPar
   }
 
   @Override
-  protected FlinkDataProcessorRuntime<TimestampParameters> getRuntime(
+  public FlinkDataProcessorRuntime<TimestampParameters> getRuntime(
           DataProcessorInvocation graph) {
     AppendOutputStrategy strategy = (AppendOutputStrategy) graph.getOutputStrategies().get(0);
 

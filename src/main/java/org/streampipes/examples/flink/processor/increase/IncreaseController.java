@@ -68,7 +68,7 @@ public class IncreaseController extends FlinkDataProcessorDeclarer<IncreaseParam
   }
 
   @Override
-  protected FlinkDataProcessorRuntime<IncreaseParameters> getRuntime(DataProcessorInvocation graph) {
+  public FlinkDataProcessorRuntime<IncreaseParameters> getRuntime(DataProcessorInvocation graph) {
     ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(graph);
 
     String operation = extractor.selectedSingleValue("operation", String.class);

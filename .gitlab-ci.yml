@@ -18,7 +18,6 @@ build:
     - echo "$MAVEN_CREDENTIALS" > /root/.m2/settings.xml
     - mvn clean package -DskipTests
     - export MVN_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[')
-    - "echo $MVN_VERSION >> ./target/mvn_version"
   artifacts:
     paths:
       - ./target/*.jar
@@ -27,15 +26,16 @@ build:
   except:
     - /release-.*$/
 
-docker-backend:
+docker-flink:
    image: docker:17.06.0-ce
    stage: docker
    dependencies:
      - build
    script:
+     - export MVN_VERSION=$(cat ./target/mvn_version)
      - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $REGISTRY_HOST
-     - docker build --pull -t $IMAGE_NAME:dev .
-     - docker push $IMAGE_NAME:dev
+     - docker build --pull -t $IMAGE_NAME:$MVN_VERSION .
+     - docker push $IMAGE_NAME:$MVN_VERSION
    only:
      - dev
 
