@@ -7,7 +7,7 @@
     <version>0.51.1-SNAPSHOT</version>
 
     <properties>
-        <streampipes.version>0.51.0</streampipes.version>
+        <streampipes.version>0.51.1</streampipes.version>
         <elasticsearch.version>5.2.2</elasticsearch.version>
     </properties>
 
