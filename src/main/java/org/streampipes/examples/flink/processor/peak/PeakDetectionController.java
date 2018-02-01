@@ -79,9 +79,8 @@ public class PeakDetectionController extends FlinkDataProcessorDeclarer<PeakDete
   }
 
   @Override
-  protected FlinkDataProcessorRuntime<PeakDetectionParameters> getRuntime(DataProcessorInvocation sepa) {
-    ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(sepa);
-
+  public FlinkDataProcessorRuntime<PeakDetectionParameters> getRuntime(DataProcessorInvocation sepa,
+                                                                       ProcessingElementParameterExtractor extractor) {
     String valueToObserve = extractor.mappingPropertyValue(VALUE_TO_OBSERVE);
     String timestampMapping = extractor.mappingPropertyValue(TIMESTAMP_MAPPING);
     String groupBy = extractor.mappingPropertyValue(PARTITION_BY);

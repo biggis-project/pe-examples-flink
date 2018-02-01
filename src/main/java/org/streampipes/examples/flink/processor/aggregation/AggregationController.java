@@ -56,7 +56,9 @@ public class AggregationController extends FlinkDataProcessorDeclarer<Aggregatio
             .naryMappingPropertyWithoutRequirement(Labels.from("groupBy", "Group by", "Partitions the incoming stream" +
                     " by the selected event " +
                     "properties"), PropertyScope.DIMENSION_PROPERTY)
-            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.empty(), "aggregatedValue",
+            .outputStrategy(OutputStrategies.append(EpProperties.doubleEp(Labels.from("aggregated-value",
+                    "Aggregated Value", "The calculated aggregation value"       ),
+                    "aggregatedValue",
                     "http://schema.org/Number")))
             .requiredIntegerParameter("outputEvery", "Output Frequency", "Output values every " +
                     "(seconds")
@@ -70,8 +72,8 @@ public class AggregationController extends FlinkDataProcessorDeclarer<Aggregatio
   }
 
   @Override
-  protected FlinkDataProcessorRuntime<AggregationParameters> getRuntime(DataProcessorInvocation graph) {
-    ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(graph);
+  public FlinkDataProcessorRuntime<AggregationParameters> getRuntime(DataProcessorInvocation graph,
+                                                                     ProcessingElementParameterExtractor extractor) {
 
     List<String> groupBy = SepaUtils.getMultipleMappingPropertyNames(graph, "groupBy", true);
 

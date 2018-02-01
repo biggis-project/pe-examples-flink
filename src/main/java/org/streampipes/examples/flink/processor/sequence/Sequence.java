@@ -19,12 +19,12 @@ package org.streampipes.examples.flink.processor.sequence;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.streaming.api.functions.co.RichCoProcessFunction;
+import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
 import org.apache.flink.util.Collector;
 
 import java.util.Map;
 
-public class Sequence extends RichCoProcessFunction<Map<String, Object>, Map<String, Object>, Map<String, Object>> {
+public class Sequence extends CoProcessFunction<Map<String, Object>, Map<String, Object>, Map<String, Object>> {
 
   private String timeUnit;
   private Integer timeWindow;
