@@ -4,10 +4,10 @@
 
     <groupId>org.streampipes</groupId>
     <artifactId>streampipes-examples-flink</artifactId>
-    <version>0.50.1-SNAPSHOT</version>
+    <version>0.51.0-SNAPSHOT</version>
 
     <properties>
-        <streampipes.version>0.50.2-SNAPSHOT</streampipes.version>
+        <streampipes.version>0.51.0</streampipes.version>
         <elasticsearch.version>5.2.2</elasticsearch.version>
     </properties>
 

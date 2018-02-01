@@ -19,10 +19,9 @@ package org.streampipes.examples.flink.processor.timestamp;
 import org.streampipes.examples.flink.config.FlinkConfig;
 import org.streampipes.model.graph.DataProcessorDescription;
 import org.streampipes.model.graph.DataProcessorInvocation;
-import org.streampipes.model.output.AppendOutputStrategy;
 import org.streampipes.model.schema.EventProperty;
-import org.streampipes.model.util.SepaUtils;
 import org.streampipes.sdk.builder.ProcessingElementBuilder;
+import org.streampipes.sdk.extractor.ProcessingElementParameterExtractor;
 import org.streampipes.sdk.helpers.EpProperties;
 import org.streampipes.sdk.helpers.EpRequirements;
 import org.streampipes.sdk.helpers.Labels;
@@ -54,10 +53,10 @@ public class TimestampController extends FlinkDataProcessorDeclarer<TimestampPar
 
   @Override
   public FlinkDataProcessorRuntime<TimestampParameters> getRuntime(
-          DataProcessorInvocation graph) {
-    AppendOutputStrategy strategy = (AppendOutputStrategy) graph.getOutputStrategies().get(0);
+          DataProcessorInvocation graph,
+          ProcessingElementParameterExtractor extractor) {
 
-    String appendTimePropertyName = SepaUtils.getEventPropertyName(strategy.getEventProperties(), "appendedTime");
+    String appendTimePropertyName = extractor.mappingPropertyValue("appendedTime");
 
     List<String> selectProperties = new ArrayList<>();
     for (EventProperty p : graph.getInputStreams().get(0).getEventSchema().getEventProperties()) {

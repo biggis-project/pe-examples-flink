@@ -72,8 +72,8 @@ public class AggregationController extends FlinkDataProcessorDeclarer<Aggregatio
   }
 
   @Override
-  public FlinkDataProcessorRuntime<AggregationParameters> getRuntime(DataProcessorInvocation graph) {
-    ProcessingElementParameterExtractor extractor = ProcessingElementParameterExtractor.from(graph);
+  public FlinkDataProcessorRuntime<AggregationParameters> getRuntime(DataProcessorInvocation graph,
+                                                                     ProcessingElementParameterExtractor extractor) {
 
     List<String> groupBy = SepaUtils.getMultipleMappingPropertyNames(graph, "groupBy", true);
 
