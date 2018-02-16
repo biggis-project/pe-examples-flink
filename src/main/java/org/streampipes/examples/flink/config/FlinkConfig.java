@@ -41,14 +41,38 @@ public enum FlinkConfig implements PeConfig {
   FlinkConfig() {
     config = SpConfig.getSpConfig(SERVICE_ID);
 
-    config.register(HOST, "pe-examples-flink", "Hostname for the pe mixed flink component");
-    config.register(PORT, 8090, "Port for the pe mixed flink component");
-    config.register(FLINK_HOST, "jobmanager", "Host for the flink cluster");
-    config.register(FLINK_PORT, 6123, "Port for the flink cluster");
-    config.register(ELASTIC_HOST, "elasticsearch", "Elastic search host address");
-    config.register(ELASTIC_PORT, 9300, "Elasitc search port");
+    /*
+      FOR CONFIGURING SERVICES VIA ENVIRONMENT VARIABLES
+     */
+    String peHost = System.getenv("PE_HOST");
+    String flinkHost = System.getenv("FLINK_HOST");
+    String elasticHost = System.getenv("ELASTIC_HOST");
+    String iconHost = System.getenv("ICON_HOST");
 
-    config.register(ICON_HOST, "backend", "Hostname for the icon host");
+    if (peHost != null && !peHost.isEmpty())
+      config.register(HOST, peHost, "Hostname for the pe mixed flink component");
+    else
+      config.register(HOST, "pe-examples-flink", "Hostname for the pe mixed flink component");
+
+    if (flinkHost != null && !flinkHost.isEmpty())
+      config.register(FLINK_HOST, flinkHost, "Host for the flink cluster");
+    else
+      config.register(FLINK_HOST, "jobmanager", "Host for the flink cluster");
+
+    if (elasticHost != null && !elasticHost.isEmpty())
+      config.register(ELASTIC_HOST, elasticHost, "Elastic search host address");
+    else
+      config.register(ELASTIC_HOST, "elasticsearch", "Elastic search host address");
+
+    if (iconHost != null && !iconHost.isEmpty())
+      config.register(ICON_HOST, iconHost, "Hostname for the icon host");
+    else
+      config.register(ICON_HOST, "backend", "Hostname for the icon host");
+
+
+    config.register(PORT, 8090, "Port for the pe mixed flink component");
+    config.register(FLINK_PORT, 6123, "Port for the flink cluster");
+    config.register(ELASTIC_PORT, 9300, "Elasitc search port");
     config.register(ICON_PORT, 80, "Port for the icons in nginx");
 
     config.register(SERVICE_NAME, "Mixed Flink", "The name of the service");
